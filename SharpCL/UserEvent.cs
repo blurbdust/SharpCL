@@ -89,7 +89,7 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clSetUserEventStatus(
             IntPtr user_event,
             Int32 execution_status);

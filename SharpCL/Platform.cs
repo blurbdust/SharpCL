@@ -148,14 +148,14 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetPlatformIDs(
             UInt32 num_entries,
             [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr[] platforms,
             out UInt32 num_platforms
             );
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetDeviceIDs(
             IntPtr platform,
             DeviceType device_type,
@@ -164,7 +164,7 @@ namespace SharpCL
             out UInt32 num_device
             );
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetPlatformInfo(
             IntPtr platform,
             PlatformInfo param_name,

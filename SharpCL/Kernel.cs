@@ -139,10 +139,10 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clReleaseKernel(IntPtr kernel);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetKernelInfo(
             IntPtr kernel,
             KernelInfo param_name,
@@ -150,7 +150,7 @@ namespace SharpCL
             IntPtr param_value,
             out UIntPtr param_value_size_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clSetKernelArg(
             IntPtr kernel,
             UInt32 arg_index,

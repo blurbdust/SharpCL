@@ -4,18 +4,19 @@
   xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
   xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
   xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
-  IgnorableNamespaces="uap mp">
+  xmlns:uap6="http://schemas.microsoft.com/appx/manifest/uap/windows10/6"
+  IgnorableNamespaces="uap mp uap6">
 
   <Identity
     Name="9ac7081f-d96c-4819-8089-e38c5810f9b3"
-    Publisher="CN=david"
-    Version="1.0.0.0" />
+    Publisher="CN=blurbdust testlab"
+    Version="1.1.13.0" />
 
   <mp:PhoneIdentity PhoneProductId="9ac7081f-d96c-4819-8089-e38c5810f9b3" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
   <Properties>
     <DisplayName>ImageDemo</DisplayName>
-    <PublisherDisplayName>Davide Pesce</PublisherDisplayName>
+    <PublisherDisplayName>blurbdust</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
 
@@ -39,11 +40,16 @@
         BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Wide310x150Logo.png"/>
         <uap:SplashScreen Image="Assets\SplashScreen.png" />
+        <uap:InitialRotationPreference>
+          <uap:Rotation Preference="landscape"/></uap:InitialRotationPreference>
       </uap:VisualElements>
     </Application>
   </Applications>
 
   <Capabilities>
     <Capability Name="internetClient" />
+    <uap:Capability Name="objects3D"/>
+    <Capability Name="codeGeneration"/>
+    <uap6:Capability Name="graphicsCapture"/>
   </Capabilities>
 </Package>

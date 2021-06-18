@@ -577,10 +577,10 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clReleaseCommandQueue(IntPtr command_queue);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueNDRangeKernel(
             IntPtr command_queue,
             IntPtr kernel,
@@ -592,7 +592,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueTask(
             IntPtr command_queue,
             IntPtr kernel,
@@ -600,7 +600,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueReadBuffer(
             IntPtr command_queue,
             IntPtr buffer,
@@ -612,7 +612,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueWriteBuffer(
             IntPtr command_queue,
             IntPtr buffer,
@@ -624,7 +624,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueCopyBuffer(
             IntPtr command_queue,
             IntPtr src_buffer,
@@ -636,7 +636,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueReadImage(
             IntPtr command_queue,
             IntPtr image,
@@ -650,7 +650,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueWriteImage(
             IntPtr command_queue,
             IntPtr image,
@@ -664,7 +664,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueCopyImage(
             IntPtr command_queue,
             IntPtr src_image,
@@ -676,7 +676,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueCopyImageToBuffer(
             IntPtr command_queue,
             IntPtr src_image,
@@ -688,7 +688,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueCopyBufferToImage(
             IntPtr command_queue,
             IntPtr src_buffer,
@@ -700,7 +700,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueFillBuffer(
             IntPtr command_queue,
             IntPtr buffer,
@@ -712,7 +712,7 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueFillImage(
             IntPtr command_queue,
             IntPtr image,
@@ -723,20 +723,20 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clFlush(IntPtr command_queue);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clFinish(IntPtr command_queue);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueMarkerWithWaitList(
             IntPtr command_queue,
             UInt32 num_events_in_wait_list,
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_wait_list,
             out IntPtr out_event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clEnqueueBarrierWithWaitList(
             IntPtr command_queue,
             UInt32 num_events_in_wait_list,

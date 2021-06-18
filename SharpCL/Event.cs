@@ -115,7 +115,7 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetEventInfo(
             IntPtr _event,
             EventInfo param_name,
@@ -123,13 +123,13 @@ namespace SharpCL
             IntPtr param_value,
             out UIntPtr param_value_size_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clReleaseEvent(IntPtr _event);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true, EntryPoint = "clWaitForEvents")]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true, EntryPoint = "clWaitForEvents")]
         private extern static ErrorCode clWaitForEvents(UInt32 num_events, [MarshalAs(UnmanagedType.LPArray)] IntPtr[] event_list);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clSetEventCallback(
             IntPtr eventHandle,
             ExecutionStatus command_exec_callback_type,

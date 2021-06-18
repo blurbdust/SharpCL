@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace SharpCL
@@ -601,16 +602,22 @@ namespace SharpCL
             IntPtr imageHandle = IntPtr.Zero;
             if (data == null)
             {
+                Debug.WriteLine("********************* CreateImage<DataType>: input data was null");
                 imageHandle = clCreateImage(Handle, memoryFlags, ref format, ref descriptor, IntPtr.Zero, out error);
             }
             else
             {
+                Debug.WriteLine("********************* CreateImage<DataType>: input data was NOT null");
                 GCHandle gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
                 imageHandle = clCreateImage(Handle, memoryFlags, ref format, ref descriptor, gcHandle.AddrOfPinnedObject(), out error);
                 gcHandle.Free();
             }
             if (error != ErrorCode.Success)
+            {
+                Debug.WriteLine("********************* CreateImage<DataType>: Error was NOT success. " + error.ToString());
                 return null;
+            }
+                
 
             Size size = new Size
             {
@@ -666,7 +673,7 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateContext(
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] properties,
             Int32 num_devices,
@@ -675,7 +682,7 @@ namespace SharpCL
             IntPtr user_data,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateContextFromType(
             [MarshalAs(UnmanagedType.LPArray)] IntPtr[] properties,
             DeviceType device_type,
@@ -683,17 +690,17 @@ namespace SharpCL
             IntPtr user_data,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clReleaseContext(IntPtr context);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateCommandQueue(
             IntPtr context,
             IntPtr device,
             CommandQueueProperties properties,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateProgramWithSource(
             IntPtr context,
             UInt32 count,
@@ -701,10 +708,10 @@ namespace SharpCL
             [MarshalAs(UnmanagedType.LPArray)] UIntPtr[] lengths,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clReleaseProgram(IntPtr program);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clBuildProgram(
             IntPtr program,
             UInt32 num_devices,
@@ -713,20 +720,20 @@ namespace SharpCL
             BuildProgramNotifyFunction pfn_notify,
             IntPtr user_data);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateKernel(
             IntPtr program,
             String kernel_name,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clCreateKernelsInProgram(
             IntPtr program,
             UInt32 num_kernels,
             [Out, MarshalAs(UnmanagedType.LPArray)] IntPtr[] kernels,
             out UInt32 num_kernels_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateBuffer(
             IntPtr context,
             MemoryFlags flags,
@@ -734,7 +741,7 @@ namespace SharpCL
             IntPtr host_ptr,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateImage(
             IntPtr context,
             MemoryFlags flags,
@@ -743,7 +750,7 @@ namespace SharpCL
             IntPtr host_ptr,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetSupportedImageFormats(
             IntPtr context,
             MemoryFlags flags,
@@ -752,12 +759,12 @@ namespace SharpCL
             [Out, MarshalAs(UnmanagedType.LPArray)] ImageFormat[] image_formats,
             out UInt32 num_image_formats);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateUserEvent(
             IntPtr context,
             out ErrorCode errcode_ret);
 
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static IntPtr clCreateSampler(
             IntPtr context,
             [MarshalAs(UnmanagedType.Bool)] bool normalized_coords,

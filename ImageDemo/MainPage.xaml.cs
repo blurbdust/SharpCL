@@ -18,6 +18,9 @@ using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.Graphics.Imaging;
+using System.Net.Http;
+using System.Text;
+//using System.Net.Http;
 
 // Il modello di elemento Pagina vuota è documentato all'indirizzo https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x410
 
@@ -33,6 +36,16 @@ namespace ImageDemo
         private Dictionary<string, Kernel> kernels;
 
         private const string kernelsCode = @"
+            void md5(uint length_bytes) {
+                int2 a = 0;
+                int2 b = a;
+                int2 c = a * b;
+                uint i;
+                uint bytes_left;
+                char key[64];
+                i = length_bytes;
+            }
+    
              __kernel void blur(read_only image2d_t source, write_only image2d_t destination) {
                 // Get pixel coordinate
                 int2 coord = (int2)(get_global_id(0), get_global_id(1));
@@ -49,6 +62,9 @@ namespace ImageDemo
                 }
                 color /= 49;
 
+                // Nic test
+                uint k = 9;
+                md5(k);
                 // Write blurred pixel in destination image
                 write_imageui(destination, coord, color);
              }
@@ -64,6 +80,12 @@ namespace ImageDemo
                 // Write inverted pixel in destination image
                 write_imageui(destination, coord, color);
              }
+
+            __kernel void copy(read_only image2d_t input, write_only image2d_t output, float foo) {
+                int2 coord = (int2)(get_global_id(0), get_global_id(1));
+                write_imagef(output, coord, read_imagef(input, coord) + foo);
+             }
+
         ";
 
         public MainPage()
@@ -87,7 +109,22 @@ namespace ImageDemo
                 Application.Current.Exit();
                 return;
             }
-
+            else
+            {
+                String plats = "";
+                foreach (Platform p in Platform.GetPlatforms())
+                {
+                    plats += "Name:\t" + p.Name + "\nVendor:\t" + p.Vendor + "\nVersion:\t" + p.Version + "\n";
+                }
+                ContentDialog dialog = new ContentDialog()
+                {
+                    Title = "GPU found!",
+                    Content = plats,
+                    CloseButtonText = "Close"
+                };
+                await dialog.ShowAsync();
+            }
+            
             // Get a command queue for the first available device in the context
             commandQueue = context.CreateCommandQueue();
             if(commandQueue == null)
@@ -144,6 +181,23 @@ namespace ImageDemo
                     InvertButton.IsEnabled = true;
                 }
             }
+            else
+            {
+                
+                var imageUrl = "https://upload.wikimedia.org/wikipedia/commons/8/8e/Xbox_Velocity_Architecture_branding.jpg";
+                var client = new HttpClient();
+                Stream stream = await client.GetStreamAsync(imageUrl);
+                var memStream = new MemoryStream();
+                await stream.CopyToAsync(memStream);
+                memStream.Position = 0;
+                // since I'm hardcoding a url for an image, I might as well hardcode the dimensions of the image
+                WriteableBitmap writeableBitmap = new WriteableBitmap(1920, 1080);
+                writeableBitmap.SetSource(memStream.AsRandomAccessStream());
+                SourceImage.Source = writeableBitmap;
+
+                BlurButton.IsEnabled = true;
+                InvertButton.IsEnabled = true;                
+            }
         }
 
         private void Blur_Click(object sender, RoutedEventArgs e)
@@ -162,10 +216,59 @@ namespace ImageDemo
             WriteableBitmap sourceBitmap = SourceImage.Source as WriteableBitmap;
             byte[] sourceData = sourceBitmap.PixelBuffer.ToArray();
 
+            
             // Create OpenCL images
+            SharpCL.Image test = context.CreateImage1D(1080, MemoryFlags.ReadOnly, ImageChannelOrder.RGB, ImageChannelType.SignedInt32);
+            // checking if bug somehow in 2D image only
+            // future nic here: the bug in dynamic data types for images (probably all and not just images)
+            if (test == null)
+            {
+                ContentDialog dialog = new ContentDialog()
+                {
+                    Title = "CreateImage1D",
+                    Content = "null",
+                    CloseButtonText = "Quit"
+                };
+                await dialog.ShowAsync();
+                Application.Current.Exit();
+                return;
+            }
+
+            /*
+             https://github.com/microsoft/OpenCLOn12/blob/master/test/openclon12test.cpp#L120
+             cl::Image2D input(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
+                cl::ImageFormat(CL_RGBA, CL_FLOAT), width, height,
+                sizeof(float) * width * 4, InputData);
+             */
             SharpCL.Image sourceImage = context.CreateImage2D(sourceData, (ulong)sourceBitmap.PixelWidth, (ulong)sourceBitmap.PixelHeight,
-                MemoryFlags.ReadOnly | MemoryFlags.CopyHostPointer, ImageChannelOrder.BGRA, ImageChannelType.UnsignedInt8);
-            SharpCL.Image destinationImage = context.CreateImage2D((ulong)sourceBitmap.PixelWidth, (ulong)sourceBitmap.PixelHeight, MemoryFlags.WriteOnly, ImageChannelOrder.BGRA, ImageChannelType.UnsignedInt8);
+                MemoryFlags.ReadOnly | MemoryFlags.CopyHostPointer, ImageChannelOrder.RGBA, ImageChannelType.UnsignedInt8);
+            SharpCL.Image destinationImage = context.CreateImage2D((ulong)sourceBitmap.PixelWidth, (ulong)sourceBitmap.PixelHeight, MemoryFlags.WriteOnly, ImageChannelOrder.RGBA, ImageChannelType.UnsignedInt8);
+
+            if (sourceImage == null)
+            {
+                ContentDialog dialog = new ContentDialog()
+                {
+                    Title = "Source Image",
+                    Content = "null",
+                    CloseButtonText = "Quit"
+                };
+                await dialog.ShowAsync();
+                Application.Current.Exit();
+                return;
+            }
+
+            if (destinationImage == null)
+            {
+                ContentDialog dialog = new ContentDialog()
+                {
+                    Title = "Destination Image",
+                    Content = "null",
+                    CloseButtonText = "Quit"
+                };
+                await dialog.ShowAsync();
+                Application.Current.Exit();
+                return;
+            }
 
             // Run blur kernel
             kernels[kernelName].SetArgument(0, sourceImage);

@@ -310,7 +310,7 @@ namespace SharpCL
         #endregion
 
         #region Dll Imports
-        [DllImport("OpenCL.dll", ExactSpelling = true)]
+        [DllImport("OpenCLOn12.dll", ExactSpelling = true)]
         private extern static ErrorCode clGetDeviceInfo(
             IntPtr device,
             DeviceInfo param_name,
