@@ -22,13 +22,8 @@ using System.Net.Http;
 using System.Text;
 //using System.Net.Http;
 
-// Il modello di elemento Pagina vuota è documentato all'indirizzo https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x410
-
 namespace ImageDemo
 {
-    /// <summary>
-    /// Pagina vuota che può essere usata autonomamente oppure per l'esplorazione all'interno di un frame.
-    /// </summary>
     public sealed partial class MainPage : Page
     {
         private Context context;
@@ -37,6 +32,20 @@ namespace ImageDemo
 
         private const string kernelsCode = @"
                 __kernel void do_md5s(__global char* size, __global char* in, __global char* out) {
+	            // the following code is from a very old version of john, I'm copying the license and credits below
+		    // MD5 OpenCL kernel based on Solar Designer's MD5 algorithm implementation at:
+                    // http://openwall.info/wiki/people/solar/software/public-domain-source-code/md5
+		    //
+                    // This software is Copyright (c) 2010, Dhiru Kholia <dhiru.kholia at gmail.com>,
+                    // and it is hereby released to the general public under the following terms:
+                    // Redistribution and use in source and binary forms, with or without modification,
+                    // are permitted.
+                    //
+                    // Useful References:
+                    // 1. CUDA MD5 Hashing Experiments, http://majuric.org/software/cudamd5/
+                    // 2. oclcrack, http://sghctoma.extra.hu/index.php?p=entry&id=11
+                    // 3. http://people.eku.edu/styere/Encrypt/JS-MD5.html
+                    // 4. http://en.wikipedia.org/wiki/MD5#Algorithm */
 
                     // Macros for reading/writing chars from int32's (from rar_kernel.cl) 
                     #define GETCHAR(buf, index) (((uchar*)(buf))[(index)])
@@ -153,7 +162,8 @@ namespace ImageDemo
 	                STEP(I, d, a, b, c, GET(11), 0xbd3af235, 10)
 	                STEP(I, c, d, a, b, GET(2), 0x2ad7d2bb, 15)
 	                STEP(I, b, c, d, a, GET(9), 0xeb86d391, 21)
-            
+			
+                    // ok let's be honest, this isn't the hackiest thing in this repo :)
                     out[3] = (a + 0x67452301) >> 24;
                     out[2] = ((a + 0x67452301) << 8) >> 24;
                     out[1] = ((a + 0x67452301) << 16) >> 24;
