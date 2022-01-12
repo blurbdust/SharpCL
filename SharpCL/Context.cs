@@ -249,9 +249,20 @@ namespace SharpCL
         /// <returns>A new buffer.</returns>
         public Buffer CreateBuffer<DataType>(UInt64 size, MemoryFlags flags = MemoryFlags.None)
         {
-            IntPtr bufferHandle = clCreateBuffer(Handle, flags, new UIntPtr(size * (UInt64)Marshal.SizeOf<DataType>()), IntPtr.Zero, out error);
+            Debug.WriteLine("********************* made it into Buffer<DataType>(size) constructor");
+            IntPtr bufferHandle;
+            try
+            {
+                bufferHandle = clCreateBuffer(Handle, flags, new UIntPtr(size * (UInt64)Marshal.SizeOf<DataType>()), IntPtr.Zero, out error);
+            }
+            catch (System.ArgumentException e) {
+                bufferHandle = clCreateBuffer(Handle, flags, new UIntPtr(size), IntPtr.Zero, out error);
+            }
             if (error != ErrorCode.Success)
+            {
+                Debug.WriteLine("********************* error when creating OpenCL buffer from clCreateBuffer " + error.ToString());
                 return null;
+            }
             return new Buffer(bufferHandle, this, size, (UInt64)Marshal.SizeOf<DataType>(), MemoryObjectType.Buffer, flags);
         }
 
@@ -262,19 +273,26 @@ namespace SharpCL
         /// <param name="data">An array of data used to determine type and size of the buffer.</param>
         /// <param name="flags">Is used to specify allocation and usage information such as the memory arena that should be used to allocate the buffer object and how it will be used.</param>
         /// <returns>A new buffer.</returns>
-        public Buffer CreateBuffer<DataType>(DataType[] data, MemoryFlags flags = MemoryFlags.None)
+        public Buffer CreateBuffer<DataType>(DataType[] data, MemoryFlags flags)
         {
-            if(data == null)
+            Debug.WriteLine("********************* made it into Buffer<DataType> constructor");
+            if (data == null)
             {
                 error = ErrorCode.InvalidHostPointer;
                 return null;
             }
-
+            Debug.WriteLine("********************* Buffer<DataType> data NOT null");
             GCHandle gcHandle = GCHandle.Alloc(data, GCHandleType.Pinned);
+            Debug.WriteLine("********************* data.Length = {0:X}", data.Length);
+            Debug.WriteLine("********************* Marshal.SizeOf<DataType>() = {0:X}", Marshal.SizeOf<DataType>());
+            Debug.WriteLine("********************* gcHandle.Addr = {0:X}", gcHandle.AddrOfPinnedObject());
             IntPtr bufferHandle = clCreateBuffer(Handle, flags, new UIntPtr((UInt64)(data.Length * Marshal.SizeOf<DataType>())), gcHandle.AddrOfPinnedObject(), out error);
             gcHandle.Free();
             if (error != ErrorCode.Success)
+            {
+                Debug.WriteLine("********************* error when creating OpenCL buffer from clCreateBuffer " + error.ToString());
                 return null;
+            }
             return new Buffer(bufferHandle, this, (UInt64)data.Length, (UInt64)Marshal.SizeOf<DataType>(), MemoryObjectType.Buffer, flags);
         }
 

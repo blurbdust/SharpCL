@@ -8,23 +8,26 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}" Loaded="Page_Loaded">
 
-    <Grid>
+    <Grid Margin="0,0,0,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="100px"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <Rectangle HorizontalAlignment="Stretch" Grid.Column="0" Fill="#808080" />
+        <Rectangle Grid.Column="0" Fill="#808080" Margin="0,0,0,60" />
         <Image x:Name="SourceImage" Grid.Column="0" />
 
         <Button Content="Open..." Grid.Column="1" HorizontalAlignment="Center" Width="80" Height="36" VerticalAlignment="Top" Margin="0,10,0,0" Click="Open_Click" />
         <Button x:Name="BlurButton" Content="Blur" Grid.Column="1" HorizontalAlignment="Center" Width="80" Height="36" VerticalAlignment="Center" Margin="0,-120,0,0" IsEnabled="False" Click="Blur_Click" />
         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE111;" Grid.Column="1" FontSize="52" FontWeight="Bold" Height="60" />
         <Button x:Name="InvertButton" Content="Invert" Grid.Column="1" HorizontalAlignment="Center" Width="80" Height="36" VerticalAlignment="Center" Margin="0,120,0,0" IsEnabled="False" Click="Invert_Click" />
+        <Button x:Name="MD5Button" Content="MD5" Grid.Column="1" HorizontalAlignment="Center" Width="80" Height="36" VerticalAlignment="Top" Margin="0,625,0,0" IsEnabled="True" Click="MD5_Click" />
 
-        <Rectangle HorizontalAlignment="Stretch" Grid.Column="2" Fill="#808080" />
+        <Rectangle Grid.Column="2" Fill="#808080" Margin="0,0,0,60" />
         <Image x:Name="DestinationImage" Grid.Column="2" />
+
+        <TextBlock x:Name="TextBox" Text="Testing" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Bottom" Canvas.ZIndex="100" Grid.ColumnSpan="3"/>
     </Grid>
 
 </Page>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace SharpCL
@@ -54,6 +55,9 @@ namespace SharpCL
         /// <returns>An event object that identifies this particular kernel execution instance.</returns>
         public Event EnqueueKernel(Kernel kernel, UInt64[] globalWorkSize, UInt64[] globalWorkOffset = null, UInt64[] localWorkSize = null, List<Event> eventsWaitList = null)
         {
+            Debug.WriteLine("********************* EnqueueKernel globalWorkSize {0:d}", globalWorkSize[0]);
+            //Debug.WriteLine("********************* EnqueueKernel globalWorkOffset {0:d}", globalWorkOffset[0]);
+            //Debug.WriteLine("********************* EnqueueKernel localWorkSize {0:d}", localWorkSize[0]);
             IntPtr[] eventHandles = EventListToHandles(eventsWaitList, out UInt32 eventsCount);
 
             UIntPtr[] globalWorkSizePtr = new UIntPtr[globalWorkSize.Length];
@@ -79,7 +83,10 @@ namespace SharpCL
             error = clEnqueueNDRangeKernel(Handle, kernel.Handle, (UInt32)globalWorkSize.Length, globalWorkOffsetPtr,
                 globalWorkSizePtr, localWorkSizePtr, eventsCount, eventHandles, out IntPtr newEvent);
             if (error != ErrorCode.Success)
+            {
+                Debug.WriteLine("***************** EnqueKernel error " + error.ToString());
                 return null;
+            }
 
             return new Event(newEvent, this);
         }
@@ -124,11 +131,16 @@ namespace SharpCL
                 size = (UInt64)destination.Length;
 
             GCHandle gcHandle = GCHandle.Alloc(destination, GCHandleType.Pinned);
+            Debug.WriteLine("***************** EnqueueReadBuffer offset {0:d}", offset);
+            Debug.WriteLine("***************** EnqueueReadBuffer size {0:d}", size);
+            Debug.WriteLine("***************** EnqueueReadBuffer gcHandle.AddrOfPinnedObject() {0:X}", gcHandle.AddrOfPinnedObject());
             error = clEnqueueReadBuffer(Handle, buffer.Handle, blocking, new UIntPtr(offset * (UInt64)Marshal.SizeOf<DataType>()),
                 new UIntPtr(size * (UInt64)Marshal.SizeOf<DataType>()), gcHandle.AddrOfPinnedObject(), eventsCount, eventHandles, out IntPtr newEvent);
             gcHandle.Free();
-            if (error != ErrorCode.Success)
+            if (error != ErrorCode.Success) {
+                Debug.WriteLine("***************** EnqueueReadBuffer error " + error.ToString());
                 return null;
+            }
 
             return new Event(newEvent, this);
         }
